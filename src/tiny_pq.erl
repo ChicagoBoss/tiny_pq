@@ -11,34 +11,47 @@
         prune_collect_old/4
     ]).
 
-delete_value(Time, Value, Tree) ->
-    case gb_trees:lookup(Time, Tree) of
+%% @spec delete_value(Priority, Value, Tree) -> Tree1
+%% @doc Delete a `Value' associated with `Priority' from `Tree'
+delete_value(Priority, Value, Tree) ->
+    case gb_trees:lookup(Priority, Tree) of
         {value, [Value]} ->
-            gb_trees:delete(Time, Tree);
+            gb_trees:delete(Priority, Tree);
         {value, Values} ->
-            gb_trees:enter(Time, lists:delete(Value, Values), Tree)
+            gb_trees:enter(Priority, lists:delete(Value, Values), Tree)
     end.
 
-insert_value(FutureTime, Value, Tree) ->
-    NewVal = case gb_trees:lookup(FutureTime, Tree) of
+%% @spec insert_value(Priority, Value, Tree) -> Tree1
+%% @doc Insert a `Value' with associated `Priority' into `Tree'
+insert_value(Priority, Value, Tree) ->
+    NewVal = case gb_trees:lookup(Priority, Tree) of
         none -> [Value];
         {value, ValueList} -> [Value|ValueList]
     end,
-    gb_trees:enter(FutureTime, NewVal, Tree).
+    gb_trees:enter(Priority, NewVal, Tree).
 
-move_value(OldTime, NewTime, Value, Tree) ->
-    insert_value(NewTime, Value, delete_value(OldTime, Value, Tree)).
+%% @spec move_value(OldPriority, NewPriority, Value, Tree) -> Tree1
+%% @doc Change the priority of `Value' from `OldPriority' to `NewPriority'
+move_value(OldPriority, NewPriority, Value, Tree) ->
+    insert_value(NewPriority, Value, delete_value(OldPriority, Value, Tree)).
 
-foldr_new(Function, State, {_Size, TreeNode}, Now) ->
-    Acc1 = iterate_nonexpired_nodes(Function, State, TreeNode, Now),
+%% @spec foldr_new(Function, Acc0, Tree, Priority) -> Acc1
+%% @doc Fold over values with priority greater than `Priority'
+foldr_new(Function, Acc0, {_Size, TreeNode}, Priority) ->
+    Acc1 = iterate_nonexpired_nodes(Function, Acc0, TreeNode, Priority),
     Acc1.
 
-prune_old({Size, TreeNode}, Now) ->
-    {Tree1, NumDeleted} = prune_expired_nodes(TreeNode, Now),
+%% @spec prune_old(Tree, Priority) -> Tree1
+%% @doc Remove nodes with priority less than or equal to `Priority'
+prune_old({Size, TreeNode}, Priority) ->
+    {Tree1, NumDeleted} = prune_expired_nodes(TreeNode, Priority),
     {Size - NumDeleted, Tree1}.
 
-prune_collect_old(Function, State, {Size, TreeNode}, Now) ->
-    {Acc1, Tree1, NumDeleted} = prune_collect_expired_nodes(Function, State, TreeNode, Now),
+%% @spec prune_collect_old((Function, Acc0, Tree, Priority) -> {Acc1, Tree1}
+%% @doc Remove nodes with priority less than or equal to `Priority', and
+%% fold over them using `Function'
+prune_collect_old(Function, Acc0, {Size, TreeNode}, Priority) ->
+    {Acc1, Tree1, NumDeleted} = prune_collect_expired_nodes(Function, Acc0, TreeNode, Priority),
     {Acc1, {Size - NumDeleted, Tree1}}.
 
 
