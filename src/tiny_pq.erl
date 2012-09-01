@@ -46,7 +46,7 @@ iterate_nonexpired_nodes(Function, State, {K, V, S, L}, Now) when K > Now ->
     Acc1 = iterate_nonexpired_nodes(Function, State, L, Now),
     Acc2 = lists:foldr(Function, Acc1, V),
     iterate_nonexpired_nodes(Function, Acc2, S, Now);
-iterate_nonexpired_nodes(Function, State, {K, V, S, L}, Now) when K =< Now ->
+iterate_nonexpired_nodes(Function, State, {K, _V, _S, L}, Now) when K =< Now ->
     iterate_nonexpired_nodes(Function, State, L, Now);
 iterate_nonexpired_nodes(_Function, State, nil, _Now) ->
     State.
@@ -55,7 +55,7 @@ iterate_nonexpired_nodes(_Function, State, nil, _Now) ->
 prune_expired_nodes({K, V, S, L}, Now) when K > Now ->
     {Tree1, NumDeleted} = prune_expired_nodes(S, Now),
     {{K, V, Tree1, L}, NumDeleted};
-prune_expired_nodes({K, V, S, L}, Now) when K =< Now ->
+prune_expired_nodes({K, _V, S, L}, Now) when K =< Now ->
     {_, NumDeleted_S} = prune_expired_nodes(S, Now),
     {Tree1, NumDeleted_L} = prune_expired_nodes(L, Now),
     {Tree1, NumDeleted_S + NumDeleted_L + 1};
