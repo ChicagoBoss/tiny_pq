@@ -23,7 +23,7 @@ get-deps:
 	@$(REBAR) get-deps
 
 ## dialyzer
-PLT_FILE = ~/boss_db.plt
+PLT_FILE = ~/tiny_pq.plt
 PLT_APPS ?= kernel stdlib erts compiler
 DIALYZER_OPTS ?= -Werror_handling -Wrace_conditions -Wunmatched_returns \
 		-Wunderspecs --verbose --fullpath -n
