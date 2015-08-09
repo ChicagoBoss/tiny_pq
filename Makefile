@@ -24,7 +24,7 @@ get-deps:
 
 ## dialyzer
 PLT_FILE = ~/boss_db.plt
-PLT_APPS ?= kernel stdlib erts
+PLT_APPS ?= kernel stdlib erts compile
 DIALYZER_OPTS ?= -Werror_handling -Wrace_conditions -Wunmatched_returns \
 		-Wunderspecs --verbose --fullpath -n
 
