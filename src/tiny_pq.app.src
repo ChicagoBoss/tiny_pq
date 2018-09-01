@@ -1,13 +1,11 @@
-{application, tiny_pq,
-    [
+{application, tiny_pq, [
     {description, "TinyPQ: A simple priority queue based on gb_trees"},
-    {vsn, "0.8.16"},
-    {registered, [
-        ]},
+    {vsn, "0.8.17"},
+    {registered, []},
     {modules, []},
     {applications, [
         kernel,
         stdlib
-            ]},
+    ]},
     {env, []}
-    ]}.
+]}.
