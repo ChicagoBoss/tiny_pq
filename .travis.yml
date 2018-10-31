@@ -1,7 +1,8 @@
 language: erlang
 sudo: false
 otp_release:
-# Test on all supported releases
+# Test on all supported releases & some more
+   - 21.1
    - 21.0
    - 20.3
    - 19.3
@@ -10,8 +11,8 @@ otp_release:
 
 script:
   - make
-  - rebar eunit -v skip_deps=true
-  - make plt
+  - make test
   - make dialyze
+
 notifications:
   email: false

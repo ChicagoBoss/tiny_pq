@@ -1,11 +1,16 @@
 {application, tiny_pq, [
     {description, "TinyPQ: A simple priority queue based on gb_trees"},
-    {vsn, "0.8.17"},
+    {vsn, "0.9.0"},
     {registered, []},
     {modules, []},
     {applications, [
         kernel,
         stdlib
     ]},
-    {env, []}
+    {env, []},
+    {maintainers, ["ChicagoBoss Team"]},
+    {licenses, ["MIT/X11"]},
+    {links, [
+    	{"Github", "https://github.com/ChicagoBoss/tiny_pq"}
+    ]}
 ]}.
