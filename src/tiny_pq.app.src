@@ -1,6 +1,6 @@
 {application, tiny_pq, [
     {description, "TinyPQ: A simple priority queue based on gb_trees"},
-    {vsn, "0.9.0"},
+    {vsn, "0.9.1"},
     {registered, []},
     {modules, []},
     {applications, [
